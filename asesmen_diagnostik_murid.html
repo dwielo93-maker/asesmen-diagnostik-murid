@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Asesmen Diagnostik Minat, Kekuatan, dan Preferensi Belajar</title>
+<style>
+:root{--navy:#123b50;--green:#19866a;--pale:#e8f5f0;--line:#d8e1e5;--muted:#5b6b73}
+*{box-sizing:border-box}body{margin:0;background:#f3f6f8;color:#172b35;font:16px/1.5 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+header{background:var(--navy);color:white;padding:28px 18px}header .wrap,main{max-width:900px;margin:auto}
+.eyebrow{color:#b8e7d7;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;font-weight:700}
+h1{font-size:clamp(1.65rem,4vw,2.5rem);line-height:1.15;margin:.4rem 0}header p{color:#e0ebf0;margin:.6rem 0}
+main{padding:22px 14px 50px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 3px 12px #102d3b08}
+h2{font-size:1.25rem;margin:0 0 8px}h3{font-size:1.03rem;margin:0 0 12px}.muted{color:var(--muted);font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label.field{display:block;font-weight:650;font-size:.92rem}input,select,textarea{font:inherit;width:100%;padding:11px 12px;border:1px solid #b9c8ce;border-radius:9px;margin-top:5px;background:#fff;color:#172b35}
+.question{border:1px solid var(--line);border-radius:12px;padding:15px;margin:12px 0}.question legend{font-weight:650;padding:0 4px}.option{display:flex;gap:10px;align-items:flex-start;padding:9px 7px;border-radius:8px;cursor:pointer}.option:hover{background:#f3f8f6}.option input{width:auto;margin:5px 0 0;flex:0 0 auto}
+button{border:0;border-radius:10px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer;background:var(--green);color:white}button.secondary{background:#edf3f5;color:var(--navy);border:1px solid var(--line)}button:focus,input:focus,select:focus,textarea:focus{outline:3px solid #86cdb8;outline-offset:1px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}.progress{height:8px;background:#e3eaed;border-radius:99px;overflow:hidden}.progress span{height:100%;display:block;background:var(--green);width:0}
+.result{background:#f7fbf9;border:1px solid #c8e2d8;border-radius:12px;padding:14px;margin:10px 0}.barline{margin:10px 0}.barlabel{display:flex;justify-content:space-between;gap:12px;font-size:.92rem}.bar{height:8px;background:#e1e9e6;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;background:#19866a}
+.hidden{display:none}.note{font-size:.82rem;color:var(--muted)}footer{text-align:center;color:var(--muted);padding:0 15px 30px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.card{padding:16px}header{padding:24px 16px}}
+@media print{body{background:white}.no-print,header .eyebrow{display:none!important}.card{box-shadow:none;break-inside:avoid}header{background:white;color:#123b50;padding:10px 0}header p{color:#333}main{padding:0}.question{break-inside:avoid}button{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">Platform asesmen untuk guru</div>
+<h1>Kenali Potensi Murid</h1>
+<p>Asesmen Diagnostik Minat, Kekuatan Awal, dan Preferensi Belajar</p>
+<p>Universal untuk SD · SMP · SMA · SMK · Semua mata pelajaran</p>
+</div></header>
+<main>
+<section class="card">
+<h2>01. Identitas asesmen</h2><p class="muted">Isi data sesuai kebutuhan. Kolom identitas selain jenjang dapat dikosongkan.</p>
+<div class="grid">
+<label class="field">Nama murid<input id="nama" placeholder="Nama murid"></label>
+<label class="field">Jenjang<select id="jenjang"><option>SD</option><option selected>SMP</option><option>SMA</option><option>SMK</option></select></label>
+<label class="field">Kelas<select id="kelas"></select></label>
+<label class="field">Fase<select id="fase"><option>A</option><option>B</option><option>C</option><option selected>D</option><option>E</option><option>F</option></select></label>
+<label class="field">Mata pelajaran<input id="mapel" placeholder="Contoh: IPA, Matematika"></label>
+<label class="field">Materi/topik<input id="materi" placeholder="Contoh: Ekosistem"></label>
+<label class="field">Nama guru (opsional)<input id="guru" placeholder="Nama guru"></label>
+</div>
+</section>
+<section class="card">
+<h2>02. Petunjuk untuk murid</h2>
+<p>Jawablah berdasarkan kebiasaan dan pengalamanmu sendiri. Tidak ada jawaban benar atau salah. Pilih satu jawaban yang paling mendekati dirimu, bukan jawaban yang menurutmu paling disukai guru.</p>
+<p class="muted">Hasil digunakan untuk membantu guru merancang pembelajaran. Kamu boleh memiliki beberapa minat dan cara belajar sekaligus.</p>
+<div class="progress"><span id="progress"></span></div><p id="progressText" class="muted">0 dari 12 pertanyaan dijawab</p>
+</section>
+<form id="assessment">
+<div id="questions"></div>
+<section class="card"><h2>06. Refleksi murid (opsional)</h2><p class="muted">Ceritakan hal yang ingin kamu pelajari, kegiatan yang ingin dicoba, atau bantuan yang kamu butuhkan.</p><textarea id="refleksi" rows="3" placeholder="Menurut saya, saya paling tertarik pada..."></textarea></section>
+<div class="actions no-print"><button type="submit">Analisis hasil asesmen</button><button type="button" class="secondary" id="reset">Ulangi / kosongkan</button></div>
+</form>
+<section id="results" class="card hidden" aria-live="polite"></section>
+<section class="card">
+<h2>Catatan penggunaan</h2>
+<p class="muted">Instrumen ini adalah prototipe refleksi diri, bukan tes psikologis atau tes bakat tervalidasi. Gunakan hasil sebagai pemetaan awal dan konfirmasikan melalui observasi, portofolio, unjuk kerja, percakapan, dan perkembangan murid dari waktu ke waktu. Jangan memberi label permanen atau membatasi murid pada satu cara belajar.</p>
+<p class="note">Privasi: file ini memproses jawaban di browser lokal dan tidak mengirimkannya ke server. Gunakan tombol ekspor untuk menyimpan laporan.</p>
+</section>
+</main><footer>Asesmen Diagnostik · Prototipe HTML offline</footer>
+<script>
+const groups=[
+{key:'minat',title:'03. Pemetaan minat',subtitle:'Aktivitas dan topik yang menarik perhatianmu.',qs:[
+['Kegiatan mana yang paling membuatmu penasaran?',[['sains','Menyelidiki fenomena dan mencari tahu penyebabnya'],['kreatif','Menggambar, merancang, membuat karya, atau menciptakan ide'],['sosial','Berdiskusi, membantu teman, atau memahami orang lain'],['logika','Menggunakan teknologi, angka, pola, atau memecahkan masalah']]],
+['Jika boleh memilih proyek, mana yang kamu pilih?',[['sains','Melakukan eksperimen atau pengamatan'],['kreatif','Membuat poster, video, cerita, atau desain'],['sosial','Membuat kegiatan bersama untuk membantu orang lain'],['logika','Membuat model, program, atau solusi teknis']]],
+['Topik apa yang ingin kamu pelajari lebih dalam?',[['sains','Alam, tubuh, lingkungan, atau cara kerja sesuatu'],['kreatif','Seni, bahasa, desain, dan cara menyampaikan ide'],['sosial','Masyarakat, hubungan antarmanusia, dan kehidupan sehari-hari'],['logika','Teknologi, strategi, pola, dan tantangan berhitung']]],
+['Saat memiliki waktu luang, aktivitas mana yang paling menarik?',[['sains','Mengamati, mencoba, atau mencari jawaban atas pertanyaan'],['kreatif','Mencipta, menulis, menggambar, atau mengedit karya'],['sosial','Berbincang, berkolaborasi, atau mengorganisasi kegiatan'],['logika','Memainkan teka-teki, menyusun strategi, atau mencoba teknologi']]]]},
+{key:'bakat',title:'04. Pemetaan kekuatan awal',subtitle:'Kemampuan yang kamu rasakan sering muncul dalam kegiatan.',qs:[
+['Ketika menghadapi tugas baru, hal apa yang biasanya menjadi kekuatanmu?',[['analitis','Menemukan pola, sebab-akibat, dan hubungan antarfakta'],['kreatif','Menghasilkan ide atau cara penyelesaian yang berbeda'],['komunikasi','Menjelaskan ide dan memahami pendapat orang lain'],['praktis','Mencoba langsung dan menyelesaikan tugas secara terampil']]],
+['Teman biasanya meminta bantuanmu untuk hal apa?',[['analitis','Memahami soal, mencari kesalahan, atau memecahkan masalah'],['kreatif','Mencari ide, membuat desain, atau menyusun presentasi'],['komunikasi','Berdiskusi, menjelaskan, atau menengahi kerja kelompok'],['praktis','Mempraktikkan langkah kerja atau mengoperasikan alat']]],
+['Ketika tugas terasa sulit, apa yang paling sering kamu lakukan dengan baik?',[['analitis','Memecah masalah menjadi langkah-langkah yang logis'],['kreatif','Mencoba sudut pandang atau strategi baru'],['komunikasi','Bertanya, berdiskusi, dan menyatukan pendapat'],['praktis','Mencoba, mengevaluasi hasil, lalu memperbaiki']]],
+['Kemajuan apa yang paling sering kamu rasakan saat belajar?',[['analitis','Semakin mampu memahami konsep dan menemukan jawaban'],['kreatif','Semakin mampu membuat karya atau menyampaikan gagasan'],['komunikasi','Semakin mampu bekerja sama dan menjelaskan pemikiran'],['praktis','Semakin terampil melakukan prosedur atau tugas nyata']]]]},
+{key:'belajar',title:'05. Preferensi belajar',subtitle:'Kegiatan belajar yang menurutmu membantu memahami materi.',qs:[
+['Saat mempelajari konsep baru, kegiatan awal mana yang paling membantumu?',[['visual','Melihat gambar, diagram, peta konsep, atau demonstrasi visual'],['diskusi','Mendengar penjelasan dan membicarakannya bersama orang lain'],['bacaan','Membaca teks, rangkuman, petunjuk, atau catatan'],['praktik','Mencoba langsung melalui kegiatan atau simulasi']]],
+['Ketika belum memahami materi, apa yang ingin kamu coba?',[['visual','Melihat contoh gambar atau urutan langkah'],['diskusi','Meminta penjelasan dan mengajukan pertanyaan'],['bacaan','Membaca kembali contoh dan menulis rangkuman'],['praktik','Mengerjakan contoh soal atau mencoba alat']]],
+['Aktivitas mana yang paling kamu nikmati saat pelajaran berlangsung?',[['visual','Mengamati ilustrasi, video, bagan, atau demonstrasi'],['diskusi','Tanya jawab, debat santun, atau belajar bersama'],['bacaan','Membaca sumber, mencatat, dan menulis penjelasan'],['praktik','Eksperimen, proyek, permainan edukatif, atau praktik']]],
+['Bagaimana kamu paling suka menunjukkan bahwa kamu sudah memahami materi?',[['visual','Membuat diagram, gambar, atau peta konsep'],['diskusi','Menjelaskan secara lisan kepada guru atau teman'],['bacaan','Menulis jawaban, laporan, atau rangkuman'],['praktik','Mendemonstrasikan keterampilan atau menghasilkan produk']]]]}
+];
+const labels={sains:'Eksplorasi dan sains',kreatif:'Kreativitas dan karya',sosial:'Kolaborasi dan kepedulian sosial',logika:'Logika dan teknologi',analitis:'Penalaran dan pemecahan masalah',komunikasi:'Komunikasi dan kerja sama',praktis:'Keterampilan praktik',visual:'Visual',diskusi:'Diskusi dan penjelasan lisan',bacaan:'Membaca dan menulis',praktik:'Praktik dan pengalaman langsung'};
+const tips={sains:'Berikan kesempatan mengamati, menyelidiki, bertanya, dan menguji dugaan.',kreatif:'Tawarkan proyek terbuka, desain, pembuatan media, dan berbagai cara menghasilkan solusi.',sosial:'Libatkan murid dalam kolaborasi, diskusi, dan proyek kontekstual.',logika:'Berikan tantangan bertahap, analisis pola, pemecahan masalah, dan eksplorasi teknologi.',analitis:'Gunakan pertanyaan bertingkat, analisis bukti, penalaran, dan langkah penyelesaian.',komunikasi:'Berikan kesempatan presentasi, diskusi terstruktur, dan saling menjelaskan.',praktis:'Sediakan demonstrasi, latihan langsung, proyek, umpan balik, dan kesempatan memperbaiki.',visual:'Gunakan diagram, ilustrasi, bagan, peta konsep, dan contoh visual dengan penjelasan.',diskusi:'Padukan tanya jawab, diskusi berpasangan, penjelasan lisan, dan kesempatan bertanya.',bacaan:'Sediakan bacaan bertahap, contoh tertulis, glosarium, catatan terstruktur, dan latihan menulis.',praktik:'Sediakan latihan langsung, simulasi, proyek, dan demonstrasi keterampilan.'};
+const form=document.getElementById('assessment'), qRoot=document.getElementById('questions');
+let qNum=0;
+groups.forEach(g=>{const sec=document.createElement('section');sec.className='card';sec.innerHTML=`<h2>${g.title}</h2><p class="muted">${g.subtitle}</p>`;g.qs.forEach(([title,opts])=>{qNum++;const field=document.createElement('fieldset');field.className='question';field.innerHTML=`<legend>${qNum}. ${title}</legend>`;opts.forEach(([val,label])=>{const lab=document.createElement('label');lab.className='option';lab.innerHTML=`<input required type="radio" name="q${qNum}" value="${val}"><span>${label}</span>`;field.append(lab)});sec.append(field)});qRoot.append(sec)});
+function updateProgress(){const done=new Set([...form.querySelectorAll('input[type=radio]:checked')].map(x=>x.name)).size;document.getElementById('progress').style.width=(done/12*100)+'%';document.getElementById('progressText').textContent=`${done} dari 12 pertanyaan dijawab`}
+form.addEventListener('change',updateProgress);
+document.getElementById('jenjang').addEventListener('change',()=>{const j=document.getElementById('jenjang').value,k=document.getElementById('kelas'),f=document.getElementById('fase');const arr=j==='SD'?['1','2','3','4','5','6']:j==='SMP'?['7','8','9']:['10','11','12'];k.innerHTML=arr.map(x=>`<option>${x}</option>`).join('');f.value=j==='SD'?'B':j==='SMP'?'D':'E'});
+form.addEventListener('submit',e=>{e.preventDefault();qNum=0;const data=new FormData(form),counts={};groups.forEach(g=>{counts[g.key]={};g.qs.forEach((_,i)=>{const v=data.get('q'+(++qNum));if(v)counts[g.key][v]=(counts[g.key][v]||0)+1})});qNum=0;
+const getResults=(key)=>Object.entries(counts[key]).sort((a,b)=>b[1]-a[1]);const name=document.getElementById('nama').value.trim()||'Murid',jenjang=document.getElementById('jenjang').value,kelas=document.getElementById('kelas').value,fase=document.getElementById('fase').value,mapel=document.getElementById('mapel').value,materi=document.getElementById('materi').value,guru=document.getElementById('guru').value,refleksi=document.getElementById('refleksi').value;
+let out=`<h2>Hasil pemetaan murid</h2><p class="muted">Pemetaan awal untuk refleksi guru, bukan penetapan kemampuan permanen.</p><div class="result"><b>${esc(name)}</b><br>${esc(jenjang)} · Kelas ${esc(kelas)} · Fase ${esc(fase)}<br>${esc(mapel||'Mata pelajaran belum diisi')}${materi?' — '+esc(materi):''}${guru?'<br>Guru: '+esc(guru):''}</div>`;
+const report=[`LAPORAN ASESMEN DIAGNOSTIK`,`Nama: ${name}`,`Jenjang: ${jenjang}`,`Kelas: ${kelas}`,`Fase: ${fase}`,`Mata pelajaran: ${mapel}`,`Materi: ${materi}`,`Guru: ${guru}`];
+groups.forEach(g=>{out+=`<div class="result"><h3>${g.title.replace(/^\d+\.\s*/,'')}</h3><p class="muted">${g.subtitle}</p>`;const res=getResults(g.key);res.forEach(([k,v])=>{out+=`<div class="barline"><div class="barlabel"><span>${labels[k]||k}</span><b>${v}/4</b></div><div class="bar"><span style="width:${v/4*100}%"></span></div></div>`});if(g.key==='bakat')out+='<p class="muted">Kekuatan yang dirasakan perlu dikonfirmasi melalui tugas, portofolio, dan observasi.</p>';if(g.key==='belajar')out+='<p class="muted">Ini adalah preferensi saat ini, bukan tipe belajar tetap. Padukan berbagai cara belajar.</p>';out+='</div>';report.push('\\n'+g.title.replace(/^\d+\.\s*/,'').toUpperCase());getResults(g.key).forEach(([k,v])=>report.push(`${labels[k]||k}: ${v}/4`))});
+out+='<div class="result"><h3>Rekomendasi tindak lanjut</h3><ul><li>Tawarkan pilihan konteks atau produk tugas yang sesuai minat, sambil mengenalkan topik baru.</li><li>Konfirmasi kekuatan awal melalui rubrik, hasil kerja, unjuk kerja, dan observasi.</li><li>Kombinasikan gambar, penjelasan lisan, bacaan, diskusi, latihan, dan praktik sesuai tujuan pembelajaran.</li><li>Berikan variasi dukungan dan tingkat tantangan; jangan membatasi murid pada satu kategori.</li></ul>';
+if(refleksi)out+='<b>Refleksi murid:</b><p>'+esc(refleksi)+'</p>';out+='</div><p class="note">Data diproses lokal di browser. Gunakan tombol ekspor untuk menyimpan laporan.</p><div class="actions no-print"><button type="button" id="downloadTxt">Unduh laporan TXT</button><button type="button" class="secondary" id="print">Cetak / Simpan PDF</button><button type="button" class="secondary" id="copy">Salin laporan</button></div>';
+report.push('\\nREFLEKSI MURID: '+refleksi,'\\nCatatan: Hasil merupakan pemetaan awal; konfirmasikan melalui observasi, hasil kerja, dan percakapan dengan murid.');
+const res=document.getElementById('results');res.innerHTML=out;res.classList.remove('hidden');res.scrollIntoView({behavior:'smooth',block:'start'});
+const txt=report.join('\\n');document.getElementById('downloadTxt').onclick=()=>download('Laporan_Asesmen_'+safe(name)+'.txt',txt,'text/plain;charset=utf-8');document.getElementById('print').onclick=()=>window.print();document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(txt);alert('Laporan disalin.')}catch{alert('Clipboard tidak tersedia. Gunakan Unduh laporan TXT.')}};
+});
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safe(s){return String(s).replace(/[^a-z0-9_-]+/gi,'_')}
+function download(filename,text, type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([text],{type}));a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+document.getElementById('reset').addEventListener('click',()=>{if(confirm('Kosongkan semua jawaban dan identitas?')){form.reset();document.getElementById('results').classList.add('hidden');updateProgress();window.scrollTo({top:0,behavior:'smooth'})}});
+document.getElementById('jenjang').dispatchEvent(new Event('change'));document.getElementById('kelas').value='7';document.getElementById('fase').value='D';
+</script>
+</body></html>
